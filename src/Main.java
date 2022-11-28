@@ -5,7 +5,18 @@ import java.util.*;
 
 //Main.java
 class Main {
-
+    //Admin
+    //Admin operations1 : create table
+    public static void CreateTable(Connection on){
+        String Table_Category = "CREATE TABLE CATEGORY(" +
+            "cid INTEGER(1) PRIMARY KEY," +
+            "cname VARCHAR(20) NOT NULL)";
+        String Table_Manufacturer = "CREATE TABLE MANUFACTURER(" +
+            "mid INTEGER(2) PRIMARY KEY,"+
+            "mname VARCHAR(20) NOT NULL,"+
+            "maddress VARCHAR(50) NOT NULL,"+
+            "mphonenum INTEGER(8) NOT NULL)";
+    }
     public static void salespersonMenu() {
         String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
         Scanner salespersonChoiceScanner = new Scanner(System.in);
