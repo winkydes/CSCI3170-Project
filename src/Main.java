@@ -5,15 +5,42 @@ import java.util.*;
 
 //Main.java
 class Main {
+
+    public static void salespersonMenu() {
+        String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
+        Scanner salespersonChoiceScanner = new Scanner(System.in);
+        int salespersonChoice = 0;
+        while (salespersonChoice != 4) {
+            System.out.print(salespersonMenuMsg);
+            salespersonChoice = salespersonChoiceScanner.nextInt();
+            switch (salespersonChoice) {
+                case 1:
+                case 2: {
+                    salespersonMenu();
+                }
+            }
+        }
+        salespersonChoiceScanner.close();
+    }
+    
     public static void salesSystem(Connection con) {
-        Integer choice = 0;
+        int choice = 0;
         Scanner choiceScanner = new Scanner(System.in);
         String mainMenuMsg = "Welcome to sales system! \n \n-----Main menu-----\nWhat kinds of operation would you like to perform?\n1. Operations for administrator\n2. Operations for salesperson\n3. Operations for manager\n4. Exit this program\nEnter Your Choice: ";
-        while (choice != 4) {
-            System.out.println(mainMenuMsg);
-            choice = choiceScanner.nextInt();
-            switch (choice) {
-                case 1: 
+        System.out.print(mainMenuMsg);
+        choice = choiceScanner.nextInt();
+        switch (choice) {
+            case 1: {
+
+            }
+            case 2: {
+                salespersonMenu();
+            }
+            case 3: {
+                
+            }
+            case 4: {
+                System.exit(0);
             }
         }
         choiceScanner.close();
