@@ -9,13 +9,32 @@ class Main {
     //Admin operations1 : create table
     public static void CreateTable(Connection on){
         String Table_Category = "CREATE TABLE CATEGORY(" +
-            "cid INTEGER(1) PRIMARY KEY," +
+            "cid INTEGER PRIMARY KEY," +
             "cname VARCHAR(20) NOT NULL)";
         String Table_Manufacturer = "CREATE TABLE MANUFACTURER(" +
             "mid INTEGER(2) PRIMARY KEY,"+
             "mname VARCHAR(20) NOT NULL,"+
             "maddress VARCHAR(50) NOT NULL,"+
-            "mphonenum INTEGER(8) NOT NULL)";
+            "mphonenumber INTEGER(8) NOT NULL)";
+        String Table_Part ="CREATE TABLE PART("+
+            "pid INTEGER(3) PRIMARY KEY,"+
+            "pname VARCHAR(20) NOT NULL,"+
+            "pprice INTEGER(5) NOT NULL,"+
+            "mid INTEGER(2) NOT NULL,"+
+            "cid INTEGER NOT NULL,"+
+            "pWarrantlyPeriod INTEGER(2) NOT NULL,"+
+            "pAvailableQuantity INTEGER(2) NOT NULL";
+        String Table_SalePerson="CREATE TABLE SALEPERSON("+
+            "sid INTEGER(2) PRIMARY KEY,"+
+            "sname VARCHAR(20) NOT NULL,"+
+            "saddress VARCHAR(50) NOT NULL,"+
+            "sPhoneNumber INTEGER(8) NOT NULL,"+
+            "sExperience INTEGER NOT NULL";
+        String Table_Transaction="CREATE TABLE TRANSACTION("+
+            "tid INTEGER(4) PRIMARY KEY,"+
+            "pid INTEGER(3) NOT NULL,"+
+            "sid INTEGER(2) NOT NULL,"+
+            "tdate VARCHAR(10) NOT NULL";
     }
     public static void salespersonMenu() {
         String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
