@@ -11,7 +11,8 @@ class HelloWorld {
             System.out.println(mainMenuMsg);
             choice = choiceScanner.nextInt();
             switch (choice) {
-                case 1: 
+                case 1:
+                case 2:
             }
         }
         choiceScanner.close();
