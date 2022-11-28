@@ -1,13 +1,14 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 //Main.java
 class Main {
     //Admin
     //Admin operations1 : create table
-    public static void CreateTable(Connection on){
+    public static void CreateTable(Connection con){
         String Table_Category = "CREATE TABLE CATEGORY(" +
             "cid INTEGER PRIMARY KEY," +
             "cname VARCHAR(20) NOT NULL)";
@@ -35,6 +36,20 @@ class Main {
             "pid INTEGER(3) NOT NULL,"+
             "sid INTEGER(2) NOT NULL,"+
             "tdate VARCHAR(10) NOT NULL";
+        try {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(Table_Category);
+            stmt.executeUpdate(Table_Manufacturer);
+            stmt.executeUpdate(Table_Part);
+            stmt.executeUpdate(Table_SalePerson);
+            stmt.executeUpdate(Table_Transaction);
+            System.out.println("Done. Database is initialized.");
+        }catch (SQLException ex){
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
     }
     public static void salespersonMenu() {
         String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
