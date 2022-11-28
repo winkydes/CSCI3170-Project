@@ -49,9 +49,25 @@ class Main {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
+        }finally{
+            Administrator(con);
         }
     }
+    public static void Administrator(Connection con){
+        Scanner sc = new Scanner(System.in);
 
+        System.out.println("\nWhat kind of operation would you like to perform?");
+        System.out.println("1. Create all tables");
+        System.out.println("2. Delete all tables");
+        System.out.println("3. Load from datafile");
+        System.out.println("4. Show number of records in each table");
+        System.out.println("5. Return to the main menu");
+        System.out.print("Enter your choice: ");
+        int inputAdmin = sc.nextInt();
+        if(inputAdmin==1){
+            CreateTable(con);
+        }
+    }
     // salesperson menu display
     public static void salespersonMenu() {
         String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
