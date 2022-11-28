@@ -69,7 +69,7 @@ class Main {
         }
     }
     // salesperson menu display
-    public static void salespersonMenu() {
+    public static void salespersonMenu(Connection con) {
         String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
         Scanner salespersonChoiceScanner = new Scanner(System.in);
         int salespersonChoice = 0;
@@ -77,20 +77,20 @@ class Main {
         salespersonChoice = salespersonChoiceScanner.nextInt();
         switch (salespersonChoice) {
             case 1: {
-                searchForParts();
+                searchForParts(con);
             }
             case 2: {
                 
             }
             case 3: {
-                salesSystem();
+                salesSystem(con);
             } 
         }
         salespersonChoiceScanner.close();
     }
 
     // Salesperson: search for parts
-    public static void searchForParts() {
+    public static void searchForParts(Connection con) {
         int choice = 0;
         System.out.println("Choose the search criterion:");
         System.out.println("1. Part Name");
@@ -135,10 +135,10 @@ class Main {
             keywordScanner.close();
         }
         choiceScanner.close();
-        salesSystem();
+        salesSystem(con);
     }
     
-    public static void salesSystem() {
+    public static void salesSystem(Connection con) {
         int choice = 0;
         Scanner choiceScanner = new Scanner(System.in);
         String mainMenuMsg = "Welcome to sales system! \n \n-----Main menu-----\nWhat kinds of operation would you like to perform?\n1. Operations for administrator\n2. Operations for salesperson\n3. Operations for manager\n4. Exit this program\nEnter Your Choice: ";
@@ -146,10 +146,10 @@ class Main {
         choice = choiceScanner.nextInt();
         switch (choice) {
             case 1: {
-
+                Administrator(con);
             }
             case 2: {
-                salespersonMenu();
+                salespersonMenu(con);
             }
             case 3: {
                 
@@ -171,7 +171,7 @@ class Main {
             con = DriverManager.getConnection(dbAddress, dbUsername, dbPassword);
             System.out.println("Connected to database successfully");
             try {
-                salesSystem();
+                salesSystem(con);
             } catch (Exception e) {
                 System.out.println("Fail to get in book system initially with problem" + e);
                 System.exit(0);
