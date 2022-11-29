@@ -53,6 +53,29 @@ class Main {
             Administrator(con);
         }
     }
+    public static void DropTable(Connection con){
+        String Delete_Category = "DROP TABLE IF EXISTS CATEGORY";
+        String Delete_Manufacturer = "DROP TABLE IF EXISTS MANUFACTURER";
+        String Delete_Part = "DROP TABLE IF EXISTS PART";
+        String Delete_SalePerson = "DROP TABLE IF EXISTS SALEPERSON";
+        String Delete_Transaction = "DROP TABLE IF EXISTS TRANSACTION";
+        try{
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(Delete_Category);
+            stmt.executeUpdate(Delete_Manufacturer);
+            stmt.executeUpdate(Delete_Part);
+            stmt.executeUpdate(Delete_SalePerson);
+            stmt.executeUpdate(Delete_Transaction);
+            System.out.println("Done. Database is removed.");
+        }
+        catch (SQLException ex){
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }finally {
+            Administrator(con);
+        }
+    }
     public static void Administrator(Connection con){
         Scanner sc = new Scanner(System.in);
 
@@ -66,6 +89,9 @@ class Main {
         int inputAdmin = sc.nextInt();
         if(inputAdmin==1){
             CreateTable(con);
+        }
+        else if(inputAdmin==2){
+            DropTable(con);
         }
     }
     // salesperson menu display
