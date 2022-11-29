@@ -271,6 +271,8 @@ class Main {
             Loadcategory(con,path);
             LoadPart(con, path);
             LoadManufacturer(con, path);
+            LoadSalesperson(con, path);
+            LoadTransaction(con, path);
             System.out.println("Data is inputted to the database.");
         }
         catch(Exception ex){
@@ -302,7 +304,7 @@ class Main {
             LoadDataFile(con);
         }
         else if(inputAdmin==4){
-            
+            ShowTable(con);
         }
         else if(inputAdmin==5){
             salesSystem(con);
