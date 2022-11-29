@@ -537,8 +537,47 @@ class Main {
     }
 
     public static void CountNumTransaction(Connection con) {
-        String UpperBoundMsg = "Type in the upper bound ";
-        String LowerBoundMsg = "Choose ordering:\n1. By ascending order\n2. By descending order\nChoose the list ordering: ";
+        int upper = 0;
+        int lower = 1;
+        while (lower > upper) {
+            Scanner BoundScanner = new Scanner(System.in);
+            System.out.print("Type in the lower bound for years of experience: ");
+            lower = BoundScanner.nextInt();
+            System.out.print("Type in the upper bound for years of experience: ");
+            upper = BoundScanner.nextInt();
+            BoundScanner.close();
+            if (lower > upper) {
+                System.out.println("Error: Lower bound greater than upper bound, please try again.");
+                continue;
+            }
+        }
+        String CountNunTransEachSale = "";
+        // TODO: CountNunTransEachSale Query
+        int validCount = 0;
+        while (validCount <= 0) {
+            ResultSet rs = null;
+            try {
+                Statement stmt = con.createStatement();
+                rs = stmt.executeQuery(CountNunTransEachSale);
+                if (rs.next()) {
+                    validCount = rs.getInt(1);
+                } else {
+                    System.out.println("Error: No such element found, please try again.");
+                    continue;
+                }
+                rs.beforeFirst();
+                System.out.println("| ID | Name | Years of Experience | Number of Transaction | ");
+                while (rs.next()) {
+                    System.out.println("| " + rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                            rs.getInt(3) + " | " + rs.getInt(4) + " |");
+                }
+                System.out.println("End of Query");
+                salesSystem(con);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
         salesSystem(con);
     }
 
