@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -129,39 +130,82 @@ class Main {
         choice = choiceScanner.nextInt();
         if (choice == 1) {
             // search by part name
-            System.out.print("Type in the Search keyword: ");
-            Scanner keywordScanner = new Scanner(System.in);
-            String keyword = keywordScanner.nextLine();
-            System.out.println("Choose ordering:");
-            System.out.println("1. By price, ascending order");
-            System.out.println("2. By price, descending order");
-            System.out.print("Choose the search criterion: ");
-            choice = choiceScanner.nextInt();
-            if (choice == 1) {
-                // TODO: ascending
-                System.out.println(choice + keyword);
-            } else if (choice == 2) {
-                // TODO: descending
-                System.out.println(choice + keyword);
+            int validCount = 0;
+            while (validCount <= 0) {
+                System.out.print("Type in the Search keyword: ");
+                Scanner keywordScanner = new Scanner(System.in);
+                String keyword = keywordScanner.nextLine();
+                System.out.println("Choose ordering:");
+                System.out.println("1. By price, ascending order");
+                System.out.println("2. By price, descending order");
+                System.out.print("Choose the search criterion: ");
+                choice = choiceScanner.nextInt();
+                ResultSet rs = null;
+                try {
+                    Statement stmt = con.createStatement();
+                    if (choice == 1) {
+                        rs = stmt.executeQuery("SELECT * FROM PART p WHERE p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE ASC");
+                        rs.next();
+                        validCount = rs.getInt(1);
+                    } else if (choice == 2) {
+                        rs = stmt.executeQuery("SELECT * FROM PART p WHERE p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE DESC");
+                        rs.next();
+                        validCount = rs.getInt(1);
+                    }
+                    if (validCount <= 0) {
+                        System.out.println("Error: No such part found, please try again.");
+                    } else {
+                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty |  Price |");
+                        while(rs.next()) {
+                            System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(6) +" |");
+                        }
+                    }
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                
+                keywordScanner.close();
             }
-            keywordScanner.close();
+            
         } else if (choice == 2) {
-            System.out.print("Type in the Search keyword: ");
-            Scanner keywordScanner = new Scanner(System.in);
-            String keyword = keywordScanner.nextLine();
-            System.out.println("Choose ordering:");
-            System.out.println("1. By price, ascending order");
-            System.out.println("2. By price, descending order");
-            System.out.print("Choose the search criterion: ");
-            choice = choiceScanner.nextInt();
-            if (choice == 1) {
-                // TODO: ascending
-                System.out.println(choice + keyword);
-            } else if (choice == 2) {
-                // TODO: descending
-                System.out.println(choice + keyword);
+            // search by manufacturer name
+            int validCount = 0;
+            while (validCount <= 0) {
+                System.out.print("Type in the Search keyword: ");
+                Scanner keywordScanner = new Scanner(System.in);
+                String keyword = keywordScanner.nextLine();
+                System.out.println("Choose ordering:");
+                System.out.println("1. By price, ascending order");
+                System.out.println("2. By price, descending order");
+                System.out.print("Choose the search criterion: ");
+                choice = choiceScanner.nextInt();
+                ResultSet rs = null;
+                try {
+                    Statement stmt = con.createStatement();
+                    if (choice == 1) {
+                        rs = stmt.executeQuery("SELECT * FROM PART p, MANUFACTURER m WHERE m.MNAME LIKE '%" + keyword + "%' AND m.MID = p.MID ORDER BY p.PPRICE ASC");
+                        rs.next();
+                        validCount = rs.getInt(1);
+                    } else if (choice == 2) {
+                        rs = stmt.executeQuery("SELECT * FROM PART p, MANUFACTURER m WHERE m.MNAME LIKE '%" + keyword + "%' AND m.MID = p.MID ORDER BY p.PPRICE DESC");
+                        rs.next();
+                        validCount = rs.getInt(1);
+                    }
+                    if (validCount <= 0) {
+                        System.out.println("Error: No such part found, please try again.");
+                    } else {
+                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty |  Price |");
+                        while(rs.next()) {
+                            System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(6) +" |");
+                        }
+                    }
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                keywordScanner.close();
             }
-            keywordScanner.close();
+            
+            
         }
         choiceScanner.close();
         salesSystem(con);
