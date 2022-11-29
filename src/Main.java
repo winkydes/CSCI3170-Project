@@ -1,3 +1,4 @@
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -42,14 +43,14 @@ class Main {
             " tdate VARCHAR(10) NOT NULL, " +
             " PRIMARY KEY ( tid ))";
         try {
-            System.out.println("Processing...");
+            System.out.print("Processing...");
             Statement stmt = con.createStatement();
             stmt.executeUpdate(Table_Category);
             stmt.executeUpdate(Table_Manufacturer);
             stmt.executeUpdate(Table_Part);
             stmt.executeUpdate(Table_SalePerson);
             stmt.executeUpdate(Table_Transaction);
-            System.out.println("Done. Database is initialized.");
+            System.out.print("Done. Database is initialized.");
         }catch (SQLException ex){
             // handle any errors
             System.out.println("SQLException: " + ex.getMessage());
@@ -67,6 +68,7 @@ class Main {
         String Delete_SalePerson = "DROP TABLE IF EXISTS SALEPERSON";
         String Delete_Transaction = "DROP TABLE IF EXISTS TRANSACTION";
         try{
+            System.out.println("Processing...");
             Statement stmt = con.createStatement();
             stmt.executeUpdate(Delete_Category);
             stmt.executeUpdate(Delete_Manufacturer);
@@ -83,9 +85,59 @@ class Main {
             Administrator(con);
         }
     }
-    public static void Loaddata(Connection con){
 
+    public static void Loadcategory(Connection con, String path){
+        try{
+            Scanner infile =new Scanner(new File("./" + path + "/category.txt"));
+            String dataTXT = "";
+            String dataSQL = "";
+            String InsertCategorySQL = "INSERT INTO CATEGORY VALUES";
+            while(infile.hasNextLine()){
+                dataTXT = dataTXT + infile.nextLine();
+                String[] row = new String[2];
+                row = dataTXT.split("\\t");
+                for (int i=0; i<2 ; i++){
+                    if(i==0){
+                        dataSQL +=row[i];
+                    }
+                    else{
+                        dataSQL += ", '" + row[i] + "'";
+                    }
+                }
+                Statement stmt = con.createStatement();
+                try{
+                    stmt.executeUpdate(InsertCategorySQL+ "(" + dataSQL + ")");
+                }
+                catch(SQLException ex){
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                }
+                dataTXT = "";
+                dataSQL = "";
+            }
+        }
+        catch (Exception ex){
+            System.out.println(ex);
+        }
     }
+
+    public static void Loaddatafile(Connection con){
+        Scanner sc=new Scanner(System.in);
+        System.out.print("\nType in the Source Data Folder Path: ");
+        String path = sc.next();
+        try{
+            Loadcategory(con,path);
+            System.out.println("Data is inputted to the database.");
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+        finally{
+            Administrator(con);
+        }
+    }
+
     public static void Administrator(Connection con){
         Scanner sc = new Scanner(System.in);
 
@@ -104,7 +156,10 @@ class Main {
             DropTable(con);
         }
         else if(inputAdmin==3){
-            Loaddata(con);
+            Loaddatafile(con);
+        }
+        else if(inputAdmin==4){
+            
         }
         else if(inputAdmin==5){
             salesSystem(con);
