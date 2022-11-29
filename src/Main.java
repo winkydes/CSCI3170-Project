@@ -29,7 +29,7 @@ class Main {
                 " pWarrantyPeriod INTEGER(2) NOT NULL, " +
                 " pAvailableQuantity INTEGER(2) NOT NULL, " +
                 " PRIMARY KEY ( pid ))";
-        String Table_SalePerson = "CREATE TABLE SALEPERSON " +
+        String Table_SalesPerson = "CREATE TABLE SALESPERSON " +
                 "(sid INTEGER(2) NOT NULL, " +
                 " sname VARCHAR(20) NOT NULL, " +
                 " saddress VARCHAR(50) NOT NULL, " +
@@ -48,7 +48,7 @@ class Main {
             stmt.executeUpdate(Table_Category);
             stmt.executeUpdate(Table_Manufacturer);
             stmt.executeUpdate(Table_Part);
-            stmt.executeUpdate(Table_SalePerson);
+            stmt.executeUpdate(Table_SalesPerson);
             stmt.executeUpdate(Table_Transaction);
             System.out.print("Done. Database is initialized.");
         } catch (SQLException ex) {
@@ -453,7 +453,7 @@ class Main {
             ManagerChoice = ManagerChoiceScanner.nextInt();
             switch (ManagerChoice) {
                 case 1: {
-                    ListSaleperson(con);
+                    ListSalesperson(con);
                     break;
                 }
                 case 2: {
@@ -482,9 +482,9 @@ class Main {
         }
     }
 
-    public static void ListSaleperson(Connection con) {
-        String ListSalepersonMsg = "Choose ordering:\n1. By ascending order\n2. By descending order\nChoose the list ordering: ";
-        System.out.print(ListSalepersonMsg);
+    public static void ListSalesperson(Connection con) {
+        String ListSalespersonMsg = "Choose ordering:\n1. By ascending order\n2. By descending order\nChoose the list ordering: ";
+        System.out.print(ListSalespersonMsg);
         int OrderChoice = 0;
         Scanner OrderChoiceScanner = new Scanner(System.in);
         OrderChoice = OrderChoiceScanner.nextInt();
@@ -504,7 +504,7 @@ class Main {
                 break;
             }
         }
-        String SelectSalespersons = "SELECT sid, sname, sPhoneNumber, sExperience FROM SALEPERSON ";
+        String SelectSalespersons = "SELECT sid, sname, sPhoneNumber, sExperience FROM SALESPERSON ORDER BY sExperience ";
         int validCount = 0;
         while (validCount <= 0) {
             ResultSet rs = null;
