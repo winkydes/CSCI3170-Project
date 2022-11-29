@@ -582,10 +582,64 @@ class Main {
     }
 
     public static void TotalSalesValue(Connection con) {
+        String TotSalesValEachManu = "";
+        // TODO: TotSalesValEachManu Query
+        int validCount = 0;
+        while (validCount <= 0) {
+            ResultSet rs = null;
+            try {
+                Statement stmt = con.createStatement();
+                rs = stmt.executeQuery(TotSalesValEachManu);
+                if (rs.next()) {
+                    validCount = rs.getInt(1);
+                } else {
+                    System.out.println("Error: No such element found, please try again.");
+                    continue;
+                }
+                rs.beforeFirst();
+                System.out.println("| Manufacturer ID | Manufacturer Name | Total Sales Value | ");
+                while (rs.next()) {
+                    System.out.println("| " + rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                            rs.getInt(3) + " | ");
+                }
+                System.out.println("End of Query");
+                salesSystem(con);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
         salesSystem(con);
     }
 
     public static void NMostPopular(Connection con) {
+        String NMostPopParts = "";
+        // TODO: NMostPopParts Query
+        int validCount = 0;
+        while (validCount <= 0) {
+            ResultSet rs = null;
+            try {
+                Statement stmt = con.createStatement();
+                rs = stmt.executeQuery(NMostPopParts);
+                if (rs.next()) {
+                    validCount = rs.getInt(1);
+                } else {
+                    System.out.println("Error: No such element found, please try again.");
+                    continue;
+                }
+                rs.beforeFirst();
+                System.out.println("| Part ID | Part Name | No. of Transaction | ");
+                while (rs.next()) {
+                    System.out.println("| " + rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                            rs.getInt(3) + " | ");
+                }
+                System.out.println("End of Query");
+                salesSystem(con);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
         salesSystem(con);
     }
 
