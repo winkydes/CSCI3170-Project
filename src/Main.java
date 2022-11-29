@@ -8,33 +8,38 @@ import java.util.*;
 class Main {
     //Admin operations1 : create table
     public static void CreateTable(Connection con){
-        String Table_Category = "CREATE TABLE CATEGORY(" +
-            "cid INTEGER PRIMARY KEY," +
-            "cname VARCHAR(20) NOT NULL)";
-        String Table_Manufacturer = "CREATE TABLE MANUFACTURER(" +
-            "mid INTEGER(2) PRIMARY KEY,"+
-            "mname VARCHAR(20) NOT NULL,"+
-            "maddress VARCHAR(50) NOT NULL,"+
-            "mphonenumber INTEGER(8) NOT NULL)";
-        String Table_Part ="CREATE TABLE PART("+
-            "pid INTEGER(3) PRIMARY KEY,"+
-            "pname VARCHAR(20) NOT NULL,"+
-            "pprice INTEGER(5) NOT NULL,"+
-            "mid INTEGER(2) NOT NULL,"+
-            "cid INTEGER NOT NULL,"+
-            "pWarrantlyPeriod INTEGER(2) NOT NULL,"+
-            "pAvailableQuantity INTEGER(2) NOT NULL";
-        String Table_SalePerson="CREATE TABLE SALEPERSON("+
-            "sid INTEGER(2) PRIMARY KEY,"+
-            "sname VARCHAR(20) NOT NULL,"+
-            "saddress VARCHAR(50) NOT NULL,"+
-            "sPhoneNumber INTEGER(8) NOT NULL,"+
-            "sExperience INTEGER NOT NULL";
-        String Table_Transaction="CREATE TABLE TRANSACTION("+
-            "tid INTEGER(4) PRIMARY KEY,"+
-            "pid INTEGER(3) NOT NULL,"+
-            "sid INTEGER(2) NOT NULL,"+
-            "tdate VARCHAR(10) NOT NULL";
+        String Table_Category = "CREATE TABLE CATEGORY " +
+            "(cid INTEGER NOT NULL, " +
+            " cname VARCHAR(20) NOT NULL, " +
+            " PRIMARY KEY ( cid ))";
+        String Table_Manufacturer = "CREATE TABLE MANUFACTURER " +
+            "(mid INTEGER(2) NOT NULL, " +
+            " mname VARCHAR(20) NOT NULL, " +
+            " maddress VARCHAR(50) NOT NULL, " +
+            " mphonenumber INTEGER(8) NOT NULL, " +
+            " PRIMARY KEY ( mid ))";
+        String Table_Part ="CREATE TABLE PART " +
+            "(pid INTEGER(3) NOT NULL, " +
+            " pname VARCHAR(20) NOT NULL, " +
+            " pprice INTEGER(5) NOT NULL, " +
+            " mid INTEGER(2) NOT NULL, " +
+            " cid INTEGER NOT NULL, " +
+            " pWarrantlyPeriod INTEGER(2) NOT NULL, " +
+            " pAvailableQuantity INTEGER(2) NOT NULL, " +
+            " PRIMARY KEY ( pid ))";
+        String Table_SalePerson = "CREATE TABLE SALEPERSON " +
+            "(sid INTEGER(2) NOT NULL, " +
+            " sname VARCHAR(20) NOT NULL, " +
+            " saddress VARCHAR(50) NOT NULL, " +
+            " sPhoneNumber INTEGER(8) NOT NULL, " +
+            " sExperience INTEGER NOT NULL, " +
+            " PRIMARY KEY ( sid ))";
+        String Table_Transaction = "CREATE TABLE TRANSACTION " +
+            "(tid INTEGER(4) NOT NULL, " +
+            " pid INTEGER(3) NOT NULL, " +
+            " sid INTEGER(2) NOT NULL, " +
+            " tdate VARCHAR(10) NOT NULL, " +
+            " PRIMARY KEY ( tid ))";
         try {
             System.out.println("Processing...");
             Statement stmt = con.createStatement();
