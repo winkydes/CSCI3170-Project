@@ -29,7 +29,7 @@ class Main {
             " pWarrantyPeriod INTEGER(2) NOT NULL, " +
             " pAvailableQuantity INTEGER(2) NOT NULL, " +
             " PRIMARY KEY ( pid ))";
-        String Table_SalePerson = "CREATE TABLE SALEPERSON " +
+        String Table_SalesPerson = "CREATE TABLE SALESPERSON " +
             "(sid INTEGER(2) NOT NULL, " +
             " sname VARCHAR(20) NOT NULL, " +
             " saddress VARCHAR(50) NOT NULL, " +
@@ -48,7 +48,7 @@ class Main {
             stmt.executeUpdate(Table_Category);
             stmt.executeUpdate(Table_Manufacturer);
             stmt.executeUpdate(Table_Part);
-            stmt.executeUpdate(Table_SalePerson);
+            stmt.executeUpdate(Table_SalesPerson);
             stmt.executeUpdate(Table_Transaction);
             System.out.print("Done. Database is initialized.");
         }catch (SQLException ex){
@@ -65,7 +65,7 @@ class Main {
         String Delete_Category = "DROP TABLE IF EXISTS CATEGORY";
         String Delete_Manufacturer = "DROP TABLE IF EXISTS MANUFACTURER";
         String Delete_Part = "DROP TABLE IF EXISTS PART";
-        String Delete_SalePerson = "DROP TABLE IF EXISTS SALEPERSON";
+        String Delete_SalesPerson = "DROP TABLE IF EXISTS SALESPERSON";
         String Delete_Transaction = "DROP TABLE IF EXISTS TRANSACTION";
         try{
             System.out.println("Processing...");
@@ -73,7 +73,7 @@ class Main {
             stmt.executeUpdate(Delete_Category);
             stmt.executeUpdate(Delete_Manufacturer);
             stmt.executeUpdate(Delete_Part);
-            stmt.executeUpdate(Delete_SalePerson);
+            stmt.executeUpdate(Delete_SalesPerson);
             stmt.executeUpdate(Delete_Transaction);
             System.out.println("Done. Database is removed.");
         }
@@ -175,7 +175,6 @@ class Main {
                         dataSQL += ", '" + row[i] + "'";
                     }
                 }
-                System.out.println(dataSQL);
                 Statement stmt = con.createStatement();
                 try{
                     stmt.executeUpdate(InsertPartSQL+ "(" + dataSQL + ")");
@@ -304,7 +303,6 @@ class Main {
             LoadDataFile(con);
         }
         else if(inputAdmin==4){
-            ShowTable(con);
         }
         else if(inputAdmin==5){
             salesSystem(con);
