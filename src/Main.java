@@ -26,7 +26,7 @@ class Main {
             " pprice INTEGER(5) NOT NULL, " +
             " mid INTEGER(2) NOT NULL, " +
             " cid INTEGER NOT NULL, " +
-            " pWarrantlyPeriod INTEGER(2) NOT NULL, " +
+            " pWarrantyPeriod INTEGER(2) NOT NULL, " +
             " pAvailableQuantity INTEGER(2) NOT NULL, " +
             " PRIMARY KEY ( pid ))";
         String Table_SalePerson = "CREATE TABLE SALEPERSON " +
@@ -122,12 +122,155 @@ class Main {
         }
     }
 
-    public static void Loaddatafile(Connection con){
-        Scanner sc=new Scanner(System.in);
+    public static void LoadManufacturer(Connection con, String path) {
+        try {
+            Scanner infile =new Scanner(new File("./" + path + "/manufacturer.txt"));
+            String dataTXT = "";
+            String dataSQL = "";
+            String InsertManufacturerSQL = "INSERT INTO MANUFACTURER VALUES";
+            while(infile.hasNextLine()){
+                dataTXT = dataTXT + infile.nextLine();
+                String[] row = new String[4];
+                row = dataTXT.split("\\t");
+                for (int i=0; i<4 ; i++){
+                    if(i==0){
+                        dataSQL +=row[i];
+                    }
+                    else{
+                        dataSQL += ", '" + row[i] + "'";
+                    }
+                }
+                Statement stmt = con.createStatement();
+                try{
+                    stmt.executeUpdate(InsertManufacturerSQL+ "(" + dataSQL + ")");
+                }
+                catch(SQLException ex){
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                }
+                dataTXT = "";
+                dataSQL = "";
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void LoadPart(Connection con, String path) {
+        try {
+            Scanner infile =new Scanner(new File("./" + path + "/part.txt"));
+            String dataTXT = "";
+            String dataSQL = "";
+            String InsertPartSQL = "INSERT INTO PART VALUES";
+            while(infile.hasNextLine()){
+                dataTXT = dataTXT + infile.nextLine();
+                String[] row = new String[7];
+                row = dataTXT.split("\\t");
+                for (int i=0; i<7 ; i++){
+                    if(i==0){
+                        dataSQL +=row[i];
+                    }
+                    else{
+                        dataSQL += ", '" + row[i] + "'";
+                    }
+                }
+                System.out.println(dataSQL);
+                Statement stmt = con.createStatement();
+                try{
+                    stmt.executeUpdate(InsertPartSQL+ "(" + dataSQL + ")");
+                }
+                catch(SQLException ex){
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                }
+                dataTXT = "";
+                dataSQL = "";
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void LoadSalesperson(Connection con, String path) {
+        try {
+            Scanner infile =new Scanner(new File("./" + path + "/salesperson.txt"));
+            String dataTXT = "";
+            String dataSQL = "";
+            String InsertSalespersonSQL = "INSERT INTO SALESPERSON VALUES";
+            while(infile.hasNextLine()){
+                dataTXT = dataTXT + infile.nextLine();
+                String[] row = new String[5];
+                row = dataTXT.split("\\t");
+                for (int i=0; i<5 ; i++){
+                    if(i==0){
+                        dataSQL +=row[i];
+                    }
+                    else{
+                        dataSQL += ", '" + row[i] + "'";
+                    }
+                }
+                Statement stmt = con.createStatement();
+                try{
+                    stmt.executeUpdate(InsertSalespersonSQL+ "(" + dataSQL + ")");
+                }
+                catch(SQLException ex){
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                }
+                dataTXT = "";
+                dataSQL = "";
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void LoadTransaction(Connection con, String path) {
+        try {
+            Scanner infile =new Scanner(new File("./" + path + "/transaction.txt"));
+            String dataTXT = "";
+            String dataSQL = "";
+            String InsertTransactionSQL = "INSERT INTO TRANSACTION VALUES";
+            while(infile.hasNextLine()){
+                dataTXT = dataTXT + infile.nextLine();
+                String[] row = new String[4];
+                row = dataTXT.split("\\t");
+                for (int i=0; i<4 ; i++){
+                    if(i==0){
+                        dataSQL +=row[i];
+                    }
+                    else{
+                        dataSQL += ", '" + row[i] + "'";
+                    }
+                }
+                Statement stmt = con.createStatement();
+                try{
+                    stmt.executeUpdate(InsertTransactionSQL+ "(" + dataSQL + ")");
+                }
+                catch(SQLException ex){
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                }
+                dataTXT = "";
+                dataSQL = "";
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void LoadDataFile(Connection con){
+        Scanner sc = new Scanner(System.in);
         System.out.print("\nType in the Source Data Folder Path: ");
         String path = sc.next();
         try{
             Loadcategory(con,path);
+            LoadPart(con, path);
+            LoadManufacturer(con, path);
             System.out.println("Data is inputted to the database.");
         }
         catch(Exception ex){
@@ -156,7 +299,7 @@ class Main {
             DropTable(con);
         }
         else if(inputAdmin==3){
-            Loaddatafile(con);
+            LoadDataFile(con);
         }
         else if(inputAdmin==4){
             
@@ -222,20 +365,20 @@ class Main {
                 try {
                     Statement stmt = con.createStatement();
                     if (choice == 1) {
-                        rs = stmt.executeQuery("SELECT * FROM PART p WHERE p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE ASC");
+                        rs = stmt.executeQuery("SELECT p.PID, p.PNAME, m.MNAME, c.CNAME, p.PAVAILABLEQUANTITY, p.PWARRANTYPERIOD, p.PPRICE FROM PART p, MANUFACTURER m, CATEGORY c WHERE c.CID = p.CID AND m.MID = p.MID AND p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE ASC");
                         rs.next();
                         validCount = rs.getInt(1);
                     } else if (choice == 2) {
-                        rs = stmt.executeQuery("SELECT * FROM PART p WHERE p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE DESC");
+                        rs = stmt.executeQuery("SELECT p.PID, p.PNAME, m.MNAME, c.CNAME, p.PAVAILABLEQUANTITY, p.PWARRANTYPERIOD, p.PPRICE FROM PART p, MANUFACTURER m, CATEGORY c WHERE c.CID = p.CID AND m.MID = p.MID AND p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE DESC");
                         rs.next();
                         validCount = rs.getInt(1);
                     }
                     if (validCount <= 0) {
                         System.out.println("Error: No such part found, please try again.");
                     } else {
-                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty |  Price |");
+                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
                         while(rs.next()) {
-                            System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(6) +" |");
+                            System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(7) +" |");
                         }
                     }
                 } catch(Exception e) {
@@ -272,7 +415,7 @@ class Main {
                     if (validCount <= 0) {
                         System.out.println("Error: No such part found, please try again.");
                     } else {
-                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty |  Price |");
+                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
                         while(rs.next()) {
                             System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(6) +" |");
                         }
