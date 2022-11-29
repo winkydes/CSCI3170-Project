@@ -48,7 +48,7 @@ class Main {
             stmt.executeUpdate(Table_Category);
             stmt.executeUpdate(Table_Manufacturer);
             stmt.executeUpdate(Table_Part);
-            stmt.executeUpdate(Table_SalesPerson);
+            stmt.executeUpdate(Table_SalePerson);
             stmt.executeUpdate(Table_Transaction);
             System.out.print("Done. Database is initialized.");
         } catch (SQLException ex) {
@@ -266,6 +266,7 @@ class Main {
         } finally {
             Administrator(con);
         }
+        sc.close();
     }
 
     public static void Administrator(Connection con) {
@@ -290,6 +291,7 @@ class Main {
         } else if (inputAdmin == 5) {
             salesSystem(con);
         }
+        sc.close();
     }
 
     // salesperson menu display
