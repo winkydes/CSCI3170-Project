@@ -505,35 +505,40 @@ class Main {
             }
         }
         String SelectSalespersons = "SELECT sid, sname, sPhoneNumber, sExperience FROM SALESPERSON ORDER BY sExperience ";
+
         int validCount = 0;
         while (validCount <= 0) {
             ResultSet rs = null;
             try {
                 Statement stmt = con.createStatement();
                 rs = stmt.executeQuery(SelectSalespersons + Order);
-                rs.next();
-                validCount = rs.getInt(1);
-                if (validCount <= 0) {
-                    System.out.println("Error: No such part found, please try again.");
+                if (rs.next()) {
+                    validCount = rs.getInt(1);
                 } else {
-                    rs.beforeFirst();
-                    System.out.println("| ID | Name | Mobile Phone | Years of Experience |");
-                    while (rs.next()) {
-                        System.out.println("| " + rs.getInt(1) + " | " + rs.getString(2) + " | " +
-                                rs.getInt(3) + " | " + rs.getInt(4) + " |");
-                    }
+                    System.out.println("Error: No such element found, please try again.");
+                    continue;
                 }
+                rs.beforeFirst();
+                System.out.println("| ID | Name | Mobile Phone | Years of Experience |");
+                while (rs.next()) {
+                    System.out.println("| " + rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                            rs.getInt(3) + " | " + rs.getInt(4) + " |");
+                }
+                System.out.println("End of Query");
+                salesSystem(con);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
         }
+
         OrderChoiceScanner.close();
-        salesSystem(con);
+
     }
 
     public static void CountNumTransaction(Connection con) {
-
+        String UpperBoundMsg = "Type in the upper bound ";
+        String LowerBoundMsg = "Choose ordering:\n1. By ascending order\n2. By descending order\nChoose the list ordering: ";
         salesSystem(con);
     }
 
