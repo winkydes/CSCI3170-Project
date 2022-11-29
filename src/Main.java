@@ -112,23 +112,34 @@ class Main {
     }
     // salesperson menu display
     public static void salespersonMenu(Connection con) {
-        String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
-        Scanner salespersonChoiceScanner = new Scanner(System.in);
         int salespersonChoice = 0;
-        System.out.print(salespersonMenuMsg);
-        salespersonChoice = salespersonChoiceScanner.nextInt();
-        switch (salespersonChoice) {
-            case 1: {
-                searchForParts(con);
+        while (salespersonChoice == 0) {
+            String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
+            Scanner salespersonChoiceScanner = new Scanner(System.in);
+            System.out.print(salespersonMenuMsg);
+            salespersonChoice = salespersonChoiceScanner.nextInt();
+            switch (salespersonChoice) {
+                case 1: {
+                    searchForParts(con);
+                    break;
+                }
+                case 2: {
+                    sellParts(con);
+                    break;
+                }
+                case 3: {
+                    salesSystem(con);
+                    break;
+                }
+                default: {
+                    System.out.println("Wrong Input, please try again.");
+                    salespersonChoice = 0;
+                    break;
+                }
             }
-            case 2: {
-                sellParts(con);
-            }
-            case 3: {
-                salesSystem(con);
-            } 
+            salespersonChoiceScanner.close();
         }
-        salespersonChoiceScanner.close();
+        
     }
 
     // Salesperson: search for parts
@@ -241,25 +252,36 @@ class Main {
     
     public static void salesSystem(Connection con) {
         int choice = 0;
-        Scanner choiceScanner = new Scanner(System.in);
-        String mainMenuMsg = "Welcome to sales system! \n \n-----Main menu-----\nWhat kinds of operation would you like to perform?\n1. Operations for administrator\n2. Operations for salesperson\n3. Operations for manager\n4. Exit this program\nEnter Your Choice: ";
-        System.out.print(mainMenuMsg);
-        choice = choiceScanner.nextInt();
-        switch (choice) {
-            case 1: {
-                Administrator(con);
+        while (choice == 0) {
+            Scanner choiceScanner = new Scanner(System.in);
+            String mainMenuMsg = "Welcome to sales system! \n \n-----Main menu-----\nWhat kinds of operation would you like to perform?\n1. Operations for administrator\n2. Operations for salesperson\n3. Operations for manager\n4. Exit this program\nEnter Your Choice: ";
+            System.out.print(mainMenuMsg);
+            choice = choiceScanner.nextInt();
+            switch (choice) {
+                case 1: {
+                    Administrator(con);
+                    break;
+                }
+                case 2: {
+                    salespersonMenu(con);
+                    break;
+                }
+                case 3: {
+                    break;
+                }
+                case 4: {
+                    System.exit(0);
+                    break;
+                }
+                default: {
+                    System.out.println("Invalid Choice");
+                    choice = 0;
+                    break;
+                }
             }
-            case 2: {
-                salespersonMenu(con);
-            }
-            case 3: {
-                
-            }
-            case 4: {
-                System.exit(0);
-            }
+            choiceScanner.close();
         }
-        choiceScanner.close();
+        
     }
     public static void main(String[] args) throws SQLException {
         String dbAddress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db18?autoReconnect=true&useSSL=false";
