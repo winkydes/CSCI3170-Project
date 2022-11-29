@@ -6,7 +6,6 @@ import java.util.*;
 
 //Main.java
 class Main {
-    //Admin
     //Admin operations1 : create table
     public static void CreateTable(Connection con){
         String Table_Category = "CREATE TABLE CATEGORY(" +
@@ -37,6 +36,7 @@ class Main {
             "sid INTEGER(2) NOT NULL,"+
             "tdate VARCHAR(10) NOT NULL";
         try {
+            System.out.println("Processing...");
             Statement stmt = con.createStatement();
             stmt.executeUpdate(Table_Category);
             stmt.executeUpdate(Table_Manufacturer);
@@ -92,6 +92,9 @@ class Main {
         }
         else if(inputAdmin==2){
             DropTable(con);
+        }
+        else if(inputAdmin==5){
+            salesSystem(con);
         }
     }
     // salesperson menu display
