@@ -80,7 +80,7 @@ class Main {
                 searchForParts(con);
             }
             case 2: {
-                
+                sellParts(con);
             }
             case 3: {
                 salesSystem(con);
@@ -135,6 +135,22 @@ class Main {
             keywordScanner.close();
         }
         choiceScanner.close();
+        salesSystem(con);
+    }
+
+    // salesperson: sell a part
+    public static void sellParts(Connection con) {
+        int partId = 0;
+        int salespersonId = 0;
+        Scanner partIdScanner = new Scanner(System.in);
+        Scanner salesPersonIdScanner = new Scanner(System.in);
+        System.out.print("Enter The Part ID: ");
+        partId = partIdScanner.nextInt();
+        System.out.print("Enter The Salesperson ID: ");
+        salespersonId = salesPersonIdScanner.nextInt();
+        salesPersonIdScanner.close();
+        partIdScanner.close();
+        // TODO: Implement transaction query
         salesSystem(con);
     }
     
