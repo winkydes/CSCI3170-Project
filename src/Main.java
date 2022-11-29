@@ -311,7 +311,6 @@ class Main {
     // salesperson menu display
     public static void salespersonMenu(Connection con) {
         int salespersonChoice = 0;
-        while (salespersonChoice == 0) {
             String salespersonMenuMsg = "-----Operations for salesperson menu-----\nWhat kinds of operation would you like to perform?\n1. Search for parts\n2. Sell a part\n3. Return to main menu\nEnter Your Choice: ";
             Scanner salespersonChoiceScanner = new Scanner(System.in);
             System.out.print(salespersonMenuMsg);
@@ -332,12 +331,11 @@ class Main {
                 default: {
                     System.out.println("Wrong Input, please try again.");
                     salespersonChoice = 0;
+                    salespersonMenu(con);
                     break;
                 }
             }
             salespersonChoiceScanner.close();
-        }
-        
     }
 
     // Salesperson: search for parts
@@ -366,21 +364,22 @@ class Main {
                     Statement stmt = con.createStatement();
                     if (choice == 1) {
                         rs = stmt.executeQuery("SELECT p.PID, p.PNAME, m.MNAME, c.CNAME, p.PAVAILABLEQUANTITY, p.PWARRANTYPERIOD, p.PPRICE FROM PART p, MANUFACTURER m, CATEGORY c WHERE c.CID = p.CID AND m.MID = p.MID AND p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE ASC");
-                        rs.next();
-                        validCount = rs.getInt(1);
                     } else if (choice == 2) {
                         rs = stmt.executeQuery("SELECT p.PID, p.PNAME, m.MNAME, c.CNAME, p.PAVAILABLEQUANTITY, p.PWARRANTYPERIOD, p.PPRICE FROM PART p, MANUFACTURER m, CATEGORY c WHERE c.CID = p.CID AND m.MID = p.MID AND p.PNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE DESC");
-                        rs.next();
+                    }
+                    if (rs.next()) {
                         validCount = rs.getInt(1);
-                    }
-                    if (validCount <= 0) {
-                        System.out.println("Error: No such part found, please try again.");
                     } else {
-                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
-                        while(rs.next()) {
-                            System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(7) +" |");
-                        }
+                        System.out.println("Error: No such part found, please try again.");
+                        continue;
                     }
+                    rs.beforeFirst();
+                    System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(7) +" |");
+                    }
+                    System.out.println("End of Query");
+                    salespersonMenu(con);
                 } catch(Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -404,32 +403,30 @@ class Main {
                 try {
                     Statement stmt = con.createStatement();
                     if (choice == 1) {
-                        rs = stmt.executeQuery("SELECT * FROM PART p, MANUFACTURER m WHERE m.MNAME LIKE '%" + keyword + "%' AND m.MID = p.MID ORDER BY p.PPRICE ASC");
-                        rs.next();
-                        validCount = rs.getInt(1);
+                        rs = stmt.executeQuery("SELECT p.PID, p.PNAME, m.MNAME, c.CNAME, p.PAVAILABLEQUANTITY, p.PWARRANTYPERIOD, p.PPRICE FROM PART p, MANUFACTURER m, CATEGORY c WHERE c.CID = p.CID AND m.MID = p.MID AND m.MNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE ASC");
                     } else if (choice == 2) {
-                        rs = stmt.executeQuery("SELECT * FROM PART p, MANUFACTURER m WHERE m.MNAME LIKE '%" + keyword + "%' AND m.MID = p.MID ORDER BY p.PPRICE DESC");
-                        rs.next();
+                        rs = stmt.executeQuery("SELECT p.PID, p.PNAME, m.MNAME, c.CNAME, p.PAVAILABLEQUANTITY, p.PWARRANTYPERIOD, p.PPRICE FROM PART p, MANUFACTURER m, CATEGORY c WHERE c.CID = p.CID AND m.MID = p.MID AND m.MNAME LIKE '%" + keyword + "%' ORDER BY p.PPRICE DESC");
+                    }
+                    if (rs.next()) {
                         validCount = rs.getInt(1);
-                    }
-                    if (validCount <= 0) {
-                        System.out.println("Error: No such part found, please try again.");
                     } else {
-                        System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
-                        while(rs.next()) {
-                            System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(6) +" |");
-                        }
+                        System.out.println("Error: No such part found, please try again.");
+                        continue;
                     }
+                    rs.beforeFirst();
+                    System.out.println("| ID | Name | Manufacturer | Category | Quantity | Warranty | Price |");
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | "+ rs.getString(3) +" | "+ rs.getString(4) +" | "+ rs.getInt(5) +" | "+ rs.getInt(6) +" | "+ rs.getInt(7) +" |");
+                    }
+                    System.out.println("End of Query");
+                    salespersonMenu(con);
                 } catch(Exception e) {
                     System.out.println(e.getMessage());
                 }
                 keywordScanner.close();
             }
-            
-            
         }
         choiceScanner.close();
-        salesSystem(con);
     }
 
     // salesperson: sell a part
@@ -494,7 +491,7 @@ class Main {
             try {
                 salesSystem(con);
             } catch (Exception e) {
-                System.out.println("Fail to get in book system initially with problem" + e);
+                System.out.println("Fail to get in sales system initially with problem" + e);
                 System.exit(0);
             }
         } catch (Exception e) {
