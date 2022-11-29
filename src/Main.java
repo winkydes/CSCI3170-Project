@@ -59,6 +59,7 @@ class Main {
             Administrator(con);
         }
     }
+
     public static void DropTable(Connection con){
         String Delete_Category = "DROP TABLE IF EXISTS CATEGORY";
         String Delete_Manufacturer = "DROP TABLE IF EXISTS MANUFACTURER";
@@ -82,6 +83,9 @@ class Main {
             Administrator(con);
         }
     }
+    public static void Loaddata(Connection con){
+
+    }
     public static void Administrator(Connection con){
         Scanner sc = new Scanner(System.in);
 
@@ -98,6 +102,9 @@ class Main {
         }
         else if(inputAdmin==2){
             DropTable(con);
+        }
+        else if(inputAdmin==3){
+            Loaddata(con);
         }
         else if(inputAdmin==5){
             salesSystem(con);
