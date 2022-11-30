@@ -323,6 +323,11 @@ class Main {
                     }
                     break;
                 }
+                default: {
+                    System.out.println("Wrong Input, please try again.");
+                    ShowTable(con);
+                    break;
+                }
             }
         }
         catch(Exception e) {
