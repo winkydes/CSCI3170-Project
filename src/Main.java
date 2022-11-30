@@ -446,9 +446,9 @@ class Main {
     // Manager menu
     public static void ManagerMenu(Connection con) {
         int ManagerChoice = 0;
+        Scanner ManagerChoiceScanner = new Scanner(System.in);
         while (ManagerChoice == 0) {
             String ManagerMenuMsg = "-----Operations for manager menu-----\nWhat kinds of operation would you like to perform?\n1. List all salespersons\n2. Count the no. of transaction records of each salesperson within a specific range on years of experience\n3. Show the total sales value of each manufacturer\n4. Show the N most popular part\n5. Return to the main menu.\nEnter Your Choice: ";
-            Scanner ManagerChoiceScanner = new Scanner(System.in);
             System.out.print(ManagerMenuMsg);
             ManagerChoice = ManagerChoiceScanner.nextInt();
             switch (ManagerChoice) {
@@ -478,32 +478,29 @@ class Main {
                     break;
                 }
             }
-            ManagerChoiceScanner.close();
         }
+        ManagerChoiceScanner.close();
     }
 
     public static void ListSalesperson(Connection con) {
         String ListSalespersonMsg = "Choose ordering:\n1. By ascending order\n2. By descending order\nChoose the list ordering: ";
         System.out.print(ListSalespersonMsg);
         int OrderChoice = 0;
-        Scanner OrderChoiceScanner = new Scanner(System.in);
-        OrderChoice = OrderChoiceScanner.nextInt();
         String Order = null;
-        switch (OrderChoice) {
-            case 1: {
+        Scanner OrderChoiceScanner = new Scanner(System.in);
+        while (OrderChoice == 0) {
+
+            OrderChoice = OrderChoiceScanner.nextInt();
+            if (OrderChoice == 1) {
                 Order = "ASC";
-                break;
-            }
-            case 2: {
+            } else if (OrderChoice == 2) {
                 Order = "DESC";
-                break;
-            }
-            default: {
+            } else {
                 System.out.println("Wrong Input, please try again.");
                 OrderChoice = 0;
-                break;
             }
         }
+
         String SelectSalespersons = "SELECT sid, sname, sPhoneNumber, sExperience FROM SALESPERSON ORDER BY sExperience ";
 
         int validCount = 0;
@@ -525,34 +522,31 @@ class Main {
                             rs.getInt(3) + " | " + rs.getInt(4) + " |");
                 }
                 System.out.println("End of Query");
-                salesSystem(con);
+                ManagerMenu(con);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
         }
-
         OrderChoiceScanner.close();
-
     }
 
     public static void CountNumTransaction(Connection con) {
         int upper = 0;
         int lower = 1;
+        Scanner BoundScanner = new Scanner(System.in);
         while (lower > upper) {
-            Scanner BoundScanner = new Scanner(System.in);
             System.out.print("Type in the lower bound for years of experience: ");
             lower = BoundScanner.nextInt();
             System.out.print("Type in the upper bound for years of experience: ");
             upper = BoundScanner.nextInt();
-            BoundScanner.close();
             if (lower > upper) {
                 System.out.println("Error: Lower bound greater than upper bound, please try again.");
                 continue;
             }
         }
-        String CountNunTransEachSale = "";
-        // TODO: CountNunTransEachSale Query
+        String CountNunTransEachSale = "SELECT S.sid, S.sname, S.sExperience, COUNT(*) FROM SALESPERSON S JOIN TRANSACTION T ON S.sid LIKE T.sid WHERE S.sExperience >= "
+                + lower + " AND S.sExperience <= " + upper + " GROUP BY S.sname ORDER BY S.sid DESC";
+
         int validCount = 0;
         while (validCount <= 0) {
             ResultSet rs = null;
@@ -562,7 +556,7 @@ class Main {
                 if (rs.next()) {
                     validCount = rs.getInt(1);
                 } else {
-                    System.out.println("Error: No such element found, please try again.");
+                    System.out.println("Error: No such element found, please try agaisn.");
                     continue;
                 }
                 rs.beforeFirst();
@@ -572,13 +566,12 @@ class Main {
                             rs.getInt(3) + " | " + rs.getInt(4) + " |");
                 }
                 System.out.println("End of Query");
-                salesSystem(con);
+                ManagerMenu(con);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
         }
-        salesSystem(con);
+        BoundScanner.close();
     }
 
     public static void TotalSalesValue(Connection con) {
@@ -607,7 +600,6 @@ class Main {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
         }
         salesSystem(con);
     }
@@ -638,7 +630,6 @@ class Main {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
         }
         salesSystem(con);
     }
@@ -675,7 +666,6 @@ class Main {
             }
             choiceScanner.close();
         }
-
     }
 
     public static void main(String[] args) throws SQLException {
