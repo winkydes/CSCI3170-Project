@@ -268,7 +268,69 @@ class Main {
         }
         sc.close();
     }
-
+    public static void ShowTable(Connection con){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("\nWhich Table would you like to show: ");
+        String tableinput= sc.next();
+        ResultSet rs=null;
+        try{
+            Statement stmt =con.createStatement();
+            switch(tableinput){
+                case "category":{
+                    rs = stmt.executeQuery("SELECT * FROM CATEGORY");
+                    System.out.println("| c_ID | c_name |");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" |");
+                    }
+                    break;
+                }
+                case "manufacturer":{
+                    rs = stmt.executeQuery("SELECT * FROM MANUFACTURER");
+                    System.out.println("| m_ID | m_name | m_Address | mPhonenumber");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | " + rs.getString(3) +" | " + rs.getInt(4) );
+                    }
+                    break;
+                }
+                case "part":{
+                    rs = stmt.executeQuery("SELECT * FROM PART");
+                    System.out.println("| p_ID | p_name | p_name | m_id | c_id | p_warrantyPeriod | p_availableQuantity");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | " + rs.getString(3) +" | " + rs.getInt(4) +" | " + rs.getInt(5)+" | " + rs.getInt(6) +" | " + rs.getInt(7));
+                    }
+                    break;
+                }
+                case "salesperson":{
+                    rs = stmt.executeQuery("SELECT * FROM SALESPERSON");
+                    System.out.println("| s_ID | s_name | s_address | s_phonenumber | s_experience");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getString(2) +" | " + rs.getString(3) +" | " + rs.getInt(4) +" | " + rs.getInt(5));
+                    }
+                    break;
+                }
+                case "transaction":{
+                    rs = stmt.executeQuery("SELECT * FROM TRANSACTION");
+                    System.out.println("| t_ID | p_ID | s_ID | t_Date ");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        System.out.println("| " + rs.getInt(1) +" | " + rs.getInt(2) +" | " + rs.getInt(3) +" | " + rs.getString(4) );
+                    }
+                    break;
+                }
+            }
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            Administrator(con);
+        }
+        sc.close();
+    }
     public static void Administrator(Connection con) {
         Scanner sc = new Scanner(System.in);
 
@@ -287,6 +349,7 @@ class Main {
         } else if (inputAdmin == 3) {
             LoadDataFile(con);
         } else if (inputAdmin == 4) {
+            ShowTable(con);
 
         } else if (inputAdmin == 5) {
             salesSystem(con);
