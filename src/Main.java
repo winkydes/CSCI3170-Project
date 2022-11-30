@@ -576,10 +576,6 @@ class Main {
 
     public static void TotalSalesValue(Connection con) {
         String TotSalesValEachManu = "SELECT M.mid, M.mname, SUM(P.pprice) FROM MANUFACTURER M JOIN PART P ON M.mid LIKE P.mid JOIN TRANSACTION T ON T.pid LIKE P.pid GROUP BY M.mid ORDER BY SUM(P.pprice) DESC";
-        // TODO: TotSalesValEachManu Query
-        // SELECT M.mid, M.mname, SUM(P.pprice) FROM MANUFACTURER M JOIN PART P ON M.mid
-        // LIKE P.mid JOIN TRANSACTION T ON T.pid LIKE M.pid GROUP BY M.mid ORDER BY
-        // SUM(P.pprice)
 
         int validCount = 0;
         while (validCount <= 0) {
@@ -608,8 +604,19 @@ class Main {
     }
 
     public static void NMostPopular(Connection con) {
-        String NMostPopParts = "";
-        // TODO: NMostPopParts Query
+        int N = 0;
+        Scanner NMost = new Scanner(System.in);
+        while (N <= 0) {
+            System.out.print("Type in the number of parts: ");
+            N = NMost.nextInt();
+            if (N <= 0) {
+                System.out.println("Wrong Input, please try again.");
+                N = 0;
+            }
+        }
+        String NMostPopParts = "SELECT P.pid, P.pname, COUNT(*) FROM PART P JOIN TRANSACTION T ON P.pid LIKE T.pid GROUP BY P.pid ORDER BY COUNT(*) DESC LIMIT "
+                + N;
+
         int validCount = 0;
         while (validCount <= 0) {
             ResultSet rs = null;
@@ -634,7 +641,7 @@ class Main {
                 System.out.println(e.getMessage());
             }
         }
-        salesSystem(con);
+        NMost.close();
     }
 
     public static void salesSystem(Connection con) {
