@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 //Main.java
@@ -494,16 +496,52 @@ class Main {
     public static void sellParts(Connection con) {
         int partId = 0;
         int salespersonId = 0;
-        Scanner partIdScanner = new Scanner(System.in);
-        Scanner salesPersonIdScanner = new Scanner(System.in);
-        System.out.print("Enter The Part ID: ");
-        partId = partIdScanner.nextInt();
-        System.out.print("Enter The Salesperson ID: ");
-        salespersonId = salesPersonIdScanner.nextInt();
-        salesPersonIdScanner.close();
-        partIdScanner.close();
-        // TODO: Implement transaction query
-        salesSystem(con);
+        Scanner sc = new Scanner(System.in);
+        Boolean correctInput = false;
+        while (!correctInput) {
+            System.out.print("Enter The Part ID: ");
+            partId = sc.nextInt();
+            System.out.print("Enter The Salesperson ID: ");
+            salespersonId = sc.nextInt();
+            Boolean hasPart = false;
+            try {
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT p.PNAME, p.PID, p.PAVAILABLEQUANTITY FROM PART p WHERE p.PID = " + partId);
+                if (rs.next()) {
+                    String pname = rs.getString(1);
+                    int pid = rs.getInt(2);
+                    int pquantity = rs.getInt(3);
+                    hasPart = pquantity != 0;
+                    if (hasPart) {
+                        // perform transaction
+                        stmt.executeUpdate("UPDATE PART SET PAVAILABLEQUANTITY = " + (pquantity - 1) + " WHERE PID = " + pid);
+                        correctInput = true;
+                        System.out.println("Product: " + pname + "(id: " + pid + ") Remaining Quantity: " + (pquantity - 1));
+                        ResultSet rs2 = null;
+                        Statement stmt2 = con.createStatement();
+                        rs2 = stmt2.executeQuery("SELECT MAX(t.TID) FROM TRANSACTION t");
+                        if (rs2.next()) {
+                            int newTid = rs2.getInt(1) + 1;
+                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");  
+                            LocalDateTime now = LocalDateTime.now();  
+                            stmt.executeUpdate("INSERT INTO TRANSACTION VALUES (" + newTid + ", " + pid + ", " + salespersonId + ", '" + dtf.format(now).toString() + "')");
+                        }
+                        salespersonMenu(con);
+                    } else {
+                        System.out.println("Product: " + pname + "(id: " + pid + " Remaining Quantity: 0");
+                        System.out.println("This product is sold out, the transaction is cancelled.");
+                    }
+                } else {
+                    System.out.println("Error: No such part found, please try again.");
+                    continue;
+                }
+                rs.close();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+           
+        }
+        sc.close();
     }
 
     // Manager menu
