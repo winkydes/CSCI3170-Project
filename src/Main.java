@@ -575,8 +575,12 @@ class Main {
     }
 
     public static void TotalSalesValue(Connection con) {
-        String TotSalesValEachManu = "";
+        String TotSalesValEachManu = "SELECT M.mid, M.mname, SUM(P.pprice) FROM MANUFACTURER M JOIN PART P ON M.mid LIKE P.mid JOIN TRANSACTION T ON T.pid LIKE P.pid GROUP BY M.mid ORDER BY SUM(P.pprice) DESC";
         // TODO: TotSalesValEachManu Query
+        // SELECT M.mid, M.mname, SUM(P.pprice) FROM MANUFACTURER M JOIN PART P ON M.mid
+        // LIKE P.mid JOIN TRANSACTION T ON T.pid LIKE M.pid GROUP BY M.mid ORDER BY
+        // SUM(P.pprice)
+
         int validCount = 0;
         while (validCount <= 0) {
             ResultSet rs = null;
@@ -586,22 +590,21 @@ class Main {
                 if (rs.next()) {
                     validCount = rs.getInt(1);
                 } else {
-                    System.out.println("Error: No such element found, please try again.");
+                    System.out.println("Error: No such element found, please try agaisn.");
                     continue;
                 }
                 rs.beforeFirst();
-                System.out.println("| Manufacturer ID | Manufacturer Name | Total Sales Value | ");
+                System.out.println(" | Manufacturer ID | Manufacturer Name | Total Sales Value | ");
                 while (rs.next()) {
                     System.out.println("| " + rs.getInt(1) + " | " + rs.getString(2) + " | " +
                             rs.getInt(3) + " | ");
                 }
                 System.out.println("End of Query");
-                salesSystem(con);
+                ManagerMenu(con);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        salesSystem(con);
     }
 
     public static void NMostPopular(Connection con) {
